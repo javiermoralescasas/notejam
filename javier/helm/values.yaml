@@ -1,0 +1,43 @@
+---
+# Number of notejam pods
+namespace: default
+
+# Set labels attributes
+labels:
+  component: "notejam"
+
+# Number of notejam pods
+replicas:
+  minNumber: 1
+  maxNumber: 4
+
+# Secret properties
+secret:
+  dockerRegistry: registry
+
+# Set global deploy security context
+securityContext:
+    fsGroup: 0
+
+# Set images attributes
+images:
+  notejam:
+    containerName: notejam
+    repository: javiermc24/javierprivate
+    tag: 0.1.1
+    pullPolicy: IfNotPresent
+    securityContext:
+      runAsUser: 0
+    ports:
+      http:
+        name: "http"
+        port: 5000
+        protocol: "TCP"
+    resources:
+      request:
+          cpu: 0.5
+          memory: 1Gi
+      limits:
+          cpu: 1
+          memory: 1.5Gi
+...

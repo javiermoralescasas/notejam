@@ -1,0 +1,48 @@
+apiVersion: v1
+kind: Service
+metadata:
+ name: notejam
+spec:
+ selector:
+   role: app
+ ports:
+   - protocol: TCP
+     port: 5000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: notejam
+  labels:
+    role: app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      role: app
+  template:
+    metadata:
+      labels:
+        role: app
+    spec:
+      containers:
+      - name: app
+        image: "notejam:1.0.0"
+        ports:
+        - containerPort: 5000
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: notejam
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+  - host: notejam.nordcloud.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: notejam
+          servicePort:  5000

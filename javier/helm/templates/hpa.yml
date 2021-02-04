@@ -1,0 +1,17 @@
+apiVersion: autoscaling/v2beta1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ include "notejam.fullname" . }}
+  namespace: {{.Values.namespace}}
+spec:
+  scaleTargetRef:
+    apiVersion: extensions/v1beta1
+    kind: Deployment
+    name: {{ include "notejam.fullname" . }}
+  minReplicas: {{.Values.replicas.minNumber }}
+  maxReplicas: {{.Values.replicas.maxNumber }}
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      targetAverageUtilization: 150
